@@ -1,0 +1,218 @@
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --board-size: 4;
+  --cell-gap: 12px;
+  --cell-size: 100px;
+  --board-padding: 12px;
+  --board-total: calc(var(--cell-size) * var(--board-size) + var(--cell-gap) * (var(--board-size) + 1));
+  --border-radius: 6px;
+}
+
+body {
+  font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+  background: #faf8ef;
+  color: #776e65;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.container {
+  width: var(--board-total);
+  position: relative;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+h1 {
+  font-size: 64px;
+  color: #776e65;
+  line-height: 1;
+}
+
+.score-container {
+  display: flex;
+  gap: 8px;
+}
+
+.score-box {
+  background: #bbada0;
+  border-radius: var(--border-radius);
+  padding: 8px 20px;
+  text-align: center;
+  min-width: 80px;
+}
+
+.score-label {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #eee4da;
+  letter-spacing: 1px;
+}
+
+.score-value {
+  display: block;
+  font-size: 22px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.tagline {
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+
+.new-game-btn {
+  background: #8f7a66;
+  color: #f9f6f2;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 14px;
+  transition: background 0.15s;
+}
+
+.new-game-btn:hover {
+  background: #9f8b77;
+}
+
+.board {
+  position: relative;
+  width: var(--board-total);
+  height: var(--board-total);
+  background: #bbada0;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.grid-background {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--board-size), var(--cell-size));
+  grid-template-rows: repeat(var(--board-size), var(--cell-size));
+  gap: var(--cell-gap);
+  padding: var(--cell-gap);
+}
+
+.grid-cell {
+  background: rgba(238, 228, 218, 0.35);
+  border-radius: var(--border-radius);
+}
+
+.tile-container {
+  position: absolute;
+  inset: 0;
+}
+
+.tile {
+  position: absolute;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 45px;
+  font-weight: bold;
+  transition: top 0.12s ease, left 0.12s ease;
+  z-index: 10;
+}
+
+.tile.merged {
+  z-index: 20;
+}
+
+@keyframes tile-appear {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes tile-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.tile.new-tile {
+  animation: tile-appear 0.2s ease;
+}
+
+.tile.merged-tile {
+  animation: tile-pop 0.2s ease;
+}
+
+/* Tile colours */
+.tile-2    { background: #eee4da; color: #776e65; }
+.tile-4    { background: #ede0c8; color: #776e65; }
+.tile-8    { background: #f2b179; color: #f9f6f2; }
+.tile-16   { background: #f59563; color: #f9f6f2; }
+.tile-32   { background: #f67c5f; color: #f9f6f2; }
+.tile-64   { background: #f65e3b; color: #f9f6f2; }
+.tile-128  { background: #edcf72; color: #f9f6f2; font-size: 40px; }
+.tile-256  { background: #edcc61; color: #f9f6f2; font-size: 40px; }
+.tile-512  { background: #edc850; color: #f9f6f2; font-size: 40px; }
+.tile-1024 { background: #edc53f; color: #f9f6f2; font-size: 32px; }
+.tile-2048 { background: #edc22e; color: #f9f6f2; font-size: 32px; }
+.tile-super { background: #3c3a32; color: #f9f6f2; font-size: 26px; }
+
+.instructions {
+  margin-top: 14px;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Overlay */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(238, 228, 218, 0.73);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius);
+  z-index: 100;
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+.overlay-content {
+  text-align: center;
+}
+
+.overlay-content p {
+  font-size: 48px;
+  font-weight: bold;
+  color: #776e65;
+  margin-bottom: 16px;
+}
+
+/* Responsive */
+@media (max-width: 520px) {
+  :root {
+    --cell-size: 65px;
+    --cell-gap: 8px;
+  }
+  h1 { font-size: 42px; }
+  .tile { font-size: 30px; }
+  .tile-128, .tile-256, .tile-512 { font-size: 26px; }
+  .tile-1024, .tile-2048 { font-size: 22px; }
+  .tile-super { font-size: 18px; }
+}
