@@ -292,6 +292,64 @@
   newGameBtn.addEventListener("click", init);
   retryBtn.addEventListener("click", init);
 
+  // ── Install button ───────────────────────────────────────
+
+  const installBtn = document.getElementById("install-btn");
+  const installModal = document.getElementById("install-modal");
+  const installClose = document.getElementById("install-close");
+  const installInstructions = document.getElementById("install-instructions");
+
+  function isStandalone() {
+    return window.matchMedia("(display-mode: standalone)").matches
+      || window.navigator.standalone === true;
+  }
+
+  function detectPlatform() {
+    const ua = navigator.userAgent;
+    if (/iPad|iPhone|iPod/.test(ua)) return "ios";
+    if (/Android/.test(ua)) return "android";
+    return "desktop";
+  }
+
+  function getInstructions(platform) {
+    if (platform === "ios") {
+      return '<ol>'
+        + '<li>Tap the <span class="key">Share</span> button (square with arrow) in Safari</li>'
+        + '<li>Scroll down and tap <strong>Add to Home Screen</strong></li>'
+        + '<li>Tap <strong>Add</strong> in the top-right corner</li>'
+        + '</ol>';
+    }
+    if (platform === "android") {
+      return '<ol>'
+        + '<li>Tap the <span class="key">&#8942;</span> menu button in Chrome</li>'
+        + '<li>Tap <strong>Add to Home screen</strong></li>'
+        + '<li>Tap <strong>Add</strong> to confirm</li>'
+        + '</ol>';
+    }
+    return '<ol>'
+      + '<li>In Chrome: click the <span class="key">&#8942;</span> menu &rarr; <strong>More tools</strong> &rarr; <strong>Create shortcut</strong></li>'
+      + '<li>In Edge: click the <span class="key">&#8943;</span> menu &rarr; <strong>Apps</strong> &rarr; <strong>Install this site as an app</strong></li>'
+      + '<li>In Firefox: bookmark this page and drag it to your desktop</li>'
+      + '</ol>';
+  }
+
+  if (!isStandalone()) {
+    installBtn.classList.remove("hidden");
+  }
+
+  installBtn.addEventListener("click", () => {
+    installInstructions.innerHTML = getInstructions(detectPlatform());
+    installModal.classList.remove("hidden");
+  });
+
+  installClose.addEventListener("click", () => {
+    installModal.classList.add("hidden");
+  });
+
+  installModal.addEventListener("click", (e) => {
+    if (e.target === installModal) installModal.classList.add("hidden");
+  });
+
   // ── Start ────────────────────────────────────────────────
 
   buildGridBg();
