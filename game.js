@@ -268,6 +268,10 @@
     }
   }, { passive: true });
 
+  boardEl.addEventListener("touchmove", (e) => {
+    if (touchStartX != null) e.preventDefault();
+  }, { passive: false });
+
   boardEl.addEventListener("touchend", (e) => {
     if (touchStartX == null) return;
     const dx = e.changedTouches[0].clientX - touchStartX;
