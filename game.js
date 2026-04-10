@@ -105,6 +105,46 @@
     bestScoreEl.textContent = bestScore;
   }
 
+  // ── State persistence ────────────────────────────────────
+
+  function saveState() {
+    try {
+      const cells = [];
+      for (let r = 0; r < SIZE; r++)
+        for (let c = 0; c < SIZE; c++)
+          if (grid[r][c]) cells.push({ r, c, value: grid[r][c].value });
+      localStorage.setItem("2048-state", JSON.stringify({
+        cells, score, won, over,
+      }));
+    } catch (_) {}
+  }
+
+  function clearState() {
+    try { localStorage.removeItem("2048-state"); } catch (_) {}
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem("2048-state");
+      if (!raw) return false;
+      const state = JSON.parse(raw);
+      if (!state.cells || !state.cells.length) return false;
+      tileContainerEl.innerHTML = "";
+      grid = Array.from({ length: SIZE }, () => Array(SIZE).fill(null));
+      tileId = 0;
+      won = state.won || false;
+      over = state.over || false;
+      state.cells.forEach(({ r, c, value }) => {
+        grid[r][c] = createTile(r, c, value);
+      });
+      setScore(state.score || 0);
+      if (over) showOverlay("Game Over!");
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
   // ── Core logic ───────────────────────────────────────────
 
   function buildGridBg() {
@@ -127,6 +167,7 @@
     setScore(0);
     addRandomTile();
     addRandomTile();
+    saveState();
   }
 
   // Traverse order helpers
@@ -225,6 +266,7 @@
           over = true;
           setTimeout(() => showOverlay("Game Over!"), 300);
         }
+        saveState();
       }, 140);
     }
   }
@@ -289,8 +331,8 @@
   }, { passive: true });
 
   // Buttons
-  newGameBtn.addEventListener("click", init);
-  retryBtn.addEventListener("click", init);
+  newGameBtn.addEventListener("click", () => { clearState(); init(); });
+  retryBtn.addEventListener("click", () => { clearState(); init(); });
 
   // ── Install button ───────────────────────────────────────
 
@@ -354,5 +396,5 @@
 
   buildGridBg();
   loadBest();
-  init();
+  if (!loadState()) init();
 })();
