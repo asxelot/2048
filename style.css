@@ -213,6 +213,92 @@ h1 {
   margin-bottom: 16px;
 }
 
+/* Install button */
+.install-btn {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  background: #8f7a66;
+  color: #f9f6f2;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.install-btn:hover {
+  background: #9f8b77;
+}
+
+.install-btn.hidden {
+  display: none;
+}
+
+/* Install modal */
+.install-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 20px;
+}
+
+.install-modal.hidden {
+  display: none;
+}
+
+.install-modal-content {
+  background: #faf8ef;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 360px;
+  width: 100%;
+  position: relative;
+}
+
+.install-modal-content h2 {
+  font-size: 22px;
+  color: #776e65;
+  margin-bottom: 16px;
+}
+
+.install-modal-content ol {
+  margin: 0;
+  padding-left: 20px;
+  color: #776e65;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.install-modal-content .key {
+  display: inline-block;
+  background: #bbada0;
+  color: #fff;
+  padding: 1px 7px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: bold;
+  vertical-align: middle;
+}
+
+.install-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #776e65;
+  cursor: pointer;
+  line-height: 1;
+}
+
 /* Responsive */
 @media (max-width: 520px) {
   :root {
