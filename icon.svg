@@ -1,4 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="64" fill="#edc22e"/>
-  <text x="256" y="290" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="180" font-weight="bold" fill="#f9f6f2">2048</text>
+  <rect width="512" height="512" rx="64" fill="#bbada0"/>
+  <!-- 2x2 tile grid representing the game -->
+  <rect x="32" y="32" width="216" height="216" rx="24" fill="#ede0c8"/>
+  <rect x="264" y="32" width="216" height="216" rx="24" fill="#f2b179"/>
+  <rect x="32" y="264" width="216" height="216" rx="24" fill="#f59563"/>
+  <rect x="264" y="264" width="216" height="216" rx="24" fill="#edc22e"/>
 </svg>
