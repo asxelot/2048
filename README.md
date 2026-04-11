@@ -12,4 +12,5 @@ https://asxelot.github.io/2048/
 - Keyboard controls (arrow keys + WASD)
 - Touch/swipe support for mobile
 - Score tracking with best score persistence
+- Game state saved to localStorage
 - Responsive design
