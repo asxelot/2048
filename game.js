@@ -303,18 +303,18 @@
   // Touch / swipe
   let touchStartX, touchStartY;
 
-  boardEl.addEventListener("touchstart", (e) => {
+  document.addEventListener("touchstart", (e) => {
     if (e.touches.length === 1) {
       touchStartX = e.touches[0].clientX;
       touchStartY = e.touches[0].clientY;
     }
   }, { passive: true });
 
-  boardEl.addEventListener("touchmove", (e) => {
+  document.addEventListener("touchmove", (e) => {
     if (touchStartX != null) e.preventDefault();
   }, { passive: false });
 
-  boardEl.addEventListener("touchend", (e) => {
+  document.addEventListener("touchend", (e) => {
     if (touchStartX == null) return;
     const dx = e.changedTouches[0].clientX - touchStartX;
     const dy = e.changedTouches[0].clientY - touchStartY;
