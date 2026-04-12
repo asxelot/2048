@@ -39,6 +39,7 @@ body {
 .container {
   width: var(--board-total);
   position: relative;
+  margin-top: -5vh;
 }
 
 header {
