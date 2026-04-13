@@ -334,9 +334,35 @@
   newGameBtn.addEventListener("click", () => { clearState(); init(); });
   retryBtn.addEventListener("click", () => { clearState(); init(); });
 
+  // ── Center the board vertically ──────────────────────────
+
+  function centerBoard() {
+    const vh = window.innerHeight;
+    const boardRect = boardEl.getBoundingClientRect();
+    const containerTop = boardEl.parentElement.getBoundingClientRect().top;
+    // We want the board's center to be at vh/2.
+    // currentBoardCenter = boardRect.top + boardRect.height / 2
+    // targetBoardCenter = vh / 2
+    // offset to add to container = targetBoardCenter - currentBoardCenter
+    const currentCenter = boardRect.top + boardRect.height / 2;
+    const targetCenter = vh / 2;
+    const delta = targetCenter - currentCenter;
+    // Add to existing container margin-top
+    const container = boardEl.parentElement;
+    const currentMargin = parseFloat(getComputedStyle(container).marginTop) || 0;
+    container.style.marginTop = (currentMargin + delta) + "px";
+  }
+
+  window.addEventListener("load", centerBoard);
+  window.addEventListener("resize", () => {
+    boardEl.parentElement.style.marginTop = "";
+    requestAnimationFrame(centerBoard);
+  });
+
   // ── Start ────────────────────────────────────────────────
 
   buildGridBg();
   loadBest();
   if (!loadState()) init();
+  centerBoard();
 })();
