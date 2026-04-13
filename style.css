@@ -41,7 +41,6 @@ body {
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   height: 100%;
 }
 
@@ -115,6 +114,8 @@ h1 {
   background: #bbada0;
   border-radius: var(--border-radius);
   overflow: hidden;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .grid-background {
