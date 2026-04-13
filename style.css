@@ -32,17 +32,12 @@ body {
   display: flex;
   justify-content: center;
   min-height: 100vh;
-  min-height: 100dvh;
   padding: 20px;
 }
 
 .container {
   width: var(--board-total);
   position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 100%;
 }
 
 header {
