@@ -9,12 +9,25 @@
   let audioCtx;
   function getAudioCtx() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === "suspended") audioCtx.resume();
     return audioCtx;
   }
+
+  // Unlock audio on first user interaction (required on iOS)
+  function unlockAudio() {
+    getAudioCtx();
+    document.removeEventListener("touchstart", unlockAudio);
+    document.removeEventListener("click", unlockAudio);
+    document.removeEventListener("keydown", unlockAudio);
+  }
+  document.addEventListener("touchstart", unlockAudio, { once: true });
+  document.addEventListener("click", unlockAudio, { once: true });
+  document.addEventListener("keydown", unlockAudio, { once: true });
 
   function playTone(freq, duration, type, volume) {
     try {
       const ctx = getAudioCtx();
+      if (ctx.state === "suspended") return;
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = type || "sine";
