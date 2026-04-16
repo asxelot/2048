@@ -4,6 +4,40 @@
   const SIZE = 4;
   const WINNING_VALUE = 2048;
 
+  // ── Sound effects (Web Audio API) ───────────────────────
+
+  let audioCtx;
+  function getAudioCtx() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    return audioCtx;
+  }
+
+  function playTone(freq, duration, type, volume) {
+    try {
+      const ctx = getAudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type || "sine";
+      osc.frequency.value = freq;
+      gain.gain.value = volume || 0.15;
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + duration);
+    } catch (_) {}
+  }
+
+  function playMove() { playTone(220, 0.08, "sine", 0.1); }
+  function playMerge() { playTone(440, 0.12, "triangle", 0.15); }
+  function playBigMerge() { playTone(600, 0.15, "triangle", 0.2); }
+  function playWin() {
+    [0, 100, 200, 300].forEach((delay, i) => {
+      setTimeout(() => playTone(523 + i * 100, 0.25, "sine", 0.18), delay);
+    });
+  }
+  function playGameOver() { playTone(150, 0.4, "sawtooth", 0.1); }
+
   // DOM
   const boardEl = document.getElementById("board");
   const tileContainerEl = document.getElementById("tile-container");
@@ -211,7 +245,9 @@
     const vec = vector(dir);
     const { rows, cols } = traverseOrder(dir);
     let moved = false;
-    const mergedSet = new Set(); // track cells already merged this turn
+    let merged = false;
+    let maxMerge = 0;
+    const mergedSet = new Set();
     const toRemove = [];
 
     for (const r of rows) {
@@ -237,10 +273,12 @@
           mergedSet.add(next.r * SIZE + next.c);
           setScore(score + newVal);
           moved = true;
+          merged = true;
+          if (newVal > maxMerge) maxMerge = newVal;
 
           if (newVal === WINNING_VALUE && !won) {
             won = true;
-            setTimeout(() => showOverlay("You win!"), 300);
+            setTimeout(() => { showOverlay("You win!"); playWin(); }, 300);
           }
         } else if (farthest.r !== r || farthest.c !== c) {
           // Just move
@@ -255,7 +293,13 @@
     }
 
     if (moved) {
-      // Remove old tiles after transition
+      if (merged) {
+        if (maxMerge >= 128) playBigMerge();
+        else playMerge();
+      } else {
+        playMove();
+      }
+
       setTimeout(() => {
         toRemove.forEach(removeTileEl);
       }, 140);
@@ -264,7 +308,7 @@
         addRandomTile();
         if (!movesAvailable()) {
           over = true;
-          setTimeout(() => showOverlay("Game Over!"), 300);
+          setTimeout(() => { showOverlay("Game Over!"); playGameOver(); }, 300);
         }
         saveState();
       }, 140);
