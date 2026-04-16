@@ -6,6 +6,9 @@
 
   // ── Sound effects (Web Audio API) ───────────────────────
 
+  let muted = false;
+  try { muted = localStorage.getItem("2048-muted") === "1"; } catch (_) {}
+
   let audioCtx;
   function getAudioCtx() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -25,6 +28,7 @@
   document.addEventListener("keydown", unlockAudio, { once: true });
 
   function playTone(freq, duration, type, volume) {
+    if (muted) return;
     try {
       const ctx = getAudioCtx();
       if (ctx.state === "suspended") return;
@@ -390,6 +394,14 @@
   // Buttons
   newGameBtn.addEventListener("click", () => { clearState(); init(); });
   retryBtn.addEventListener("click", () => { clearState(); init(); });
+
+  const muteBtn = document.getElementById("mute-btn");
+  muteBtn.textContent = muted ? "\uD83D\uDD07" : "\uD83D\uDD0A";
+  muteBtn.addEventListener("click", () => {
+    muted = !muted;
+    muteBtn.textContent = muted ? "\uD83D\uDD07" : "\uD83D\uDD0A";
+    try { localStorage.setItem("2048-muted", muted ? "1" : "0"); } catch (_) {}
+  });
 
   // ── Center the board vertically ──────────────────────────
 

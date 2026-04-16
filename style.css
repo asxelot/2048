@@ -95,11 +95,32 @@ h1 {
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  margin-bottom: 14px;
   transition: background 0.15s;
 }
 
 .new-game-btn:hover {
+  background: #9f8b77;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.mute-btn {
+  background: #bbada0;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 10px 12px;
+  font-size: 18px;
+  cursor: pointer;
+  line-height: 1;
+  transition: background 0.15s;
+}
+
+.mute-btn:hover {
   background: #9f8b77;
 }
 
